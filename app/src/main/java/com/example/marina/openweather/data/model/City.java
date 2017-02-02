@@ -1,12 +1,13 @@
 package com.example.marina.openweather.data.model;
 
-
+/**
+ * Created by Marina Shaposhnikova on 02.02.17.
+ */
 
 public class City {
     private String name;
-    private String temp;
+    private String id;
     private String thumbnail;
-
     public String getName() {
         return name;
     }
@@ -16,11 +17,11 @@ public class City {
     }
 
     public String getTemperature() {
-        return temp;
+        return id;
     }
 
-    public void setTemperature(String temp) {
-        this.temp = temp;
+    public void setTemperature(String id) {
+        this.id = id;
     }
 
     public String getThumbnail() {

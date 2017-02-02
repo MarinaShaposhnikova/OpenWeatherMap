@@ -14,10 +14,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by root on 01.02.17.
- */
-
 public class CityAdapter  extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     private List<City> cities;
 
@@ -40,7 +36,6 @@ public class CityAdapter  extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     @Override
     public CityAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_city, parent, false);
 

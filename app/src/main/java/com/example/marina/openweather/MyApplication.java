@@ -3,6 +3,7 @@ package com.example.marina.openweather;
 import android.app.Application;
 
 import com.example.marina.openweather.injection.component.AppComponent;
+
 import com.example.marina.openweather.injection.component.DaggerAppComponent;
 import com.example.marina.openweather.injection.module.AppModule;
 import com.facebook.stetho.Stetho;
