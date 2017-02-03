@@ -1,29 +1,26 @@
 package com.example.marina.openweather.screens.main;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import butterknife.BindView;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.example.marina.openweather.R;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Marina Shaposhnikova on 02.02.17.
- */
-
 public class MainDialog extends Dialog implements
-        android.view.View.OnClickListener {
+        android.view.View.OnClickListener, DialogView {
 
-    public MainActivity activity;
+    private MainActivity activity;
 
+    @InjectPresenter
+    DialogPresenter dialogPresenter;
     @BindView(R.id.btnYes)
     Button btnYes;
     @BindView(R.id.btnNo)
-    public Button btnNo;
+    Button btnNo;
     @BindView(R.id.etCityName)
     EditText etCityName;
 
@@ -38,21 +35,16 @@ public class MainDialog extends Dialog implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_dialog);
         ButterKnife.bind(this, getWindow().getDecorView());
-
         btnYes.setOnClickListener(this);
         btnNo.setOnClickListener(this);
-
     }
-
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnYes:
                 if(etCityName.getText() != null){
-                    activity.mainPresenter.getWeather();
-                } else {
-                    dismiss();
+                    activity.mainPresenter.getWeather(etCityName.getText().toString());
                 }
                 break;
             case R.id.btnNo:
@@ -61,6 +53,11 @@ public class MainDialog extends Dialog implements
             default:
                 break;
         }
+        dismiss();
+    }
+
+    @Override
+    public void dismissAlert() {
         dismiss();
     }
 }

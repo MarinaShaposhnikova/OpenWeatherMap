@@ -1,17 +1,13 @@
 package com.example.marina.openweather.injection.module;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
-import com.example.marina.openweather.data.Url;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -19,15 +15,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 
 @Module
 public class AppModule {
@@ -40,7 +30,7 @@ public class AppModule {
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient() {
-        final OkHttpClient.Builder okClientBuilder = new OkHttpClient.Builder();
+        OkHttpClient.Builder okClientBuilder = new OkHttpClient.Builder();
         okClientBuilder.addNetworkInterceptor(new StethoInterceptor());
         final File baseDir = mApplicationContext.getCacheDir();
         if (baseDir != null) {
@@ -52,7 +42,6 @@ public class AppModule {
         okClientBuilder.writeTimeout(Constants.TIMEOUT_DURATION_SEC, TimeUnit.SECONDS);
         return okClientBuilder.build();
     }
-
 
     @Provides
     @Singleton
@@ -70,12 +59,9 @@ public class AppModule {
         return retrofit.create(Api.class);
     }
 
-
     @Provides
     @Singleton
     Context provideApplicationContext() {
         return mApplicationContext;
     }
-
-
 }
