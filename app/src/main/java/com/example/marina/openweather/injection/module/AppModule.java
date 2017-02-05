@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
+import com.example.marina.openweather.screens.interactor.WeatherInteractor;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
@@ -63,5 +64,10 @@ public class AppModule {
     @Singleton
     Context provideApplicationContext() {
         return mApplicationContext;
+    }
+
+    @Provides
+    WeatherInteractor provideInteractor() {
+        return new WeatherInteractor();
     }
 }

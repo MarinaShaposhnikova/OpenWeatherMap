@@ -1,9 +1,20 @@
 package com.example.marina.openweather.screens.main;
 
-import com.example.marina.openweather.data.adapter.CityAdapter;
-import com.example.marina.openweather.screens.base.BaseView;
+import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
+import com.example.marina.openweather.data.model.Response;
 
-public interface MainView extends BaseView{
-    void showSnackBar(String text);
-    void setAdapter(CityAdapter adapter);
+import java.util.List;
+
+interface MainView extends MvpView {
+
+    @StateStrategyType(SkipStrategy.class)
+    void showMessage(String text);
+
+    void setData(List<Response> cities);
+
+    void showProgressBar();
+
+    void hideProgressBar();
 }
