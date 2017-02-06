@@ -1,71 +1,58 @@
 package com.example.marina.openweather.screens.interactor;
 
-
-import android.content.Context;
-
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
-import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.screens.repository.WeatherRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Retrofit;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class WeatherInteractor {
 
     @Inject
-    Retrofit retrofit;
-    @Inject
-    OkHttpClient okHttpClient;
-    @Inject
     Api api;
     @Inject
-    Context context;
+    WeatherRepository repository;
 
-    private List<Response> cities = new ArrayList<>();
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     public WeatherInteractor() {
         MyApplication.get().getComponent().inject(this);
     }
 
-
-    public void getWeather(String cityName, CallbackWeather callbackWeather) {
-        Map<String, String> data = new HashMap<>();
-        data.put(Constants.QUERY, cityName);
-        data.put(Constants.APP_ID, Constants.TOKEN);
-
-
-        api.getWeather(data).enqueue(new retrofit2.Callback<Response>() {
-            @Override
-            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                if (response.raw().code() == Constants.SUCCESS_CODE) {
-                    cities.add(response.body());
-                    callbackWeather.onSuccess(cities);
-                } else {
-                    callbackWeather.onFailure(context.getResources().getString(R.string.no_city));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Response> call, Throwable t) {
-                callbackWeather.onFailure(context.getResources().getString(R.string.no_internet));
-            }
-        });
+    public Observable<List<Response>> getWeatherObservable(String cityName) {
+        return api.getWeatherResponse(cityName, Constants.TOKEN)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(response -> {
+                    if (response.getResponseCode() == Constants.SUCCESS_CODE) {
+                        repository.addCity(response);
+                    } else {
+                        //TODO test exception
+                        NullPointerException e = new NullPointerException();
+                        throw e;
+                    }
+                })
+                .retryWhen(errors -> errors.flatMap(error -> {
+                    //TODO test exception
+                    if (error instanceof NullPointerException) {
+                        return Observable.just(null);
+                    }
+                    return Observable.error(error);
+                }))
+                .map(ignored -> repository.getCities());
     }
 
 
-    public interface CallbackWeather {
-        void onSuccess(List<Response> cities);
-
-        void onFailure(String message);
+    public void unSubscribe() {
+        compositeSubscription.clear();
     }
 }

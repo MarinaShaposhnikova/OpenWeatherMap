@@ -6,6 +6,7 @@ import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.screens.interactor.WeatherInteractor;
+import com.example.marina.openweather.screens.repository.WeatherRepository;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
@@ -49,6 +51,7 @@ public class AppModule {
     Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
@@ -69,5 +72,10 @@ public class AppModule {
     @Provides
     WeatherInteractor provideInteractor() {
         return new WeatherInteractor();
+    }
+
+    @Provides
+    WeatherRepository provideRepository() {
+        return new WeatherRepository();
     }
 }

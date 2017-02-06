@@ -1,12 +1,14 @@
 package com.example.marina.openweather;
 
-import retrofit2.http.QueryMap;
+import retrofit2.http.Query;
 import retrofit2.http.GET;
-import retrofit2.Call;
+import rx.Observable;
+
 import com.example.marina.openweather.data.model.Response;
-import java.util.Map;
 
 public interface Api {
-    @GET("data/2.5/forecast/weather")
-    Call<Response> getWeather(@QueryMap Map<String, String> options);
+
+    @GET("/data/2.5/forecast/weather")
+    Observable<Response> getWeatherResponse(@Query(Constants.QUERY) String query,
+                                            @Query(Constants.APP_ID) String appId);
 }

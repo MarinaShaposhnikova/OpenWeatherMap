@@ -16,6 +16,8 @@ import dagger.Component;
 
 public interface AppComponent {
     void inject(MyApplication app);
+
     void inject(MainPresenter mainPresenter);
+
     void inject(WeatherInteractor weatherInteractor);
 }

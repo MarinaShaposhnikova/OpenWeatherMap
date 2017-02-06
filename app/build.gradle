@@ -74,15 +74,4 @@ dependencies {
     //rx
     compile 'io.reactivex:rxjava:1.2.2'
     compile 'io.reactivex:rxandroid:1.2.1'
-
-
-
-//
-//    compile 'com.arello-mobile:moxy-android:1.1.1'
-
-//    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
-//    compile 'com.arello-mobile:moxy:1.4.5'
-//    provided 'com.arello-mobile:moxy-compiler:1.4.5'
-
-   // compile 'com.google.code.gson:gson:2.7'
 }

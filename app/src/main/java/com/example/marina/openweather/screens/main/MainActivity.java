@@ -9,18 +9,18 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.marina.openweather.data.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
-import com.example.marina.openweather.screens.dialog.MainDialog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,8 +47,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         setSupportActionBar(toolbar);
 
         fab.setOnClickListener(view -> {
-            MainDialog mainDialog = new MainDialog(MainActivity.this);
-            mainDialog.show();
+            mainPresenter.showAlert();
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -56,23 +55,28 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void onResume() {
         super.onResume();
-        mainPresenter.getWeather("london");
+        mainPresenter.getWeather("Kharkiv");
     }
 
     @Override
-    public void showMessage(String text) {
-        Snackbar.make(fab, text, Snackbar.LENGTH_LONG)
+    public void showMessage(int idMessage) {
+        Snackbar.make(fab, getString(idMessage), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mainPresenter.unSubscribe();
+    }
+
+    @Override
     public void setData(List<Response> cities) {
-        //TODO: refactoring
         if (adapter == null) {
             adapter = new CityAdapter(cities);
             recyclerView.setAdapter(adapter);
         } else {
-            adapter.notifyDataSetChanged();
+            adapter.setData(cities);
         }
     }
 
@@ -84,6 +88,33 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showAlert() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.enter_city);
+        final EditText input = new EditText(this);
+        alert.setView(input);
+        alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+            mainPresenter.onClickAlertOk(input.getText().toString());
+        });
+
+        alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
+            mainPresenter.onClickAlertCancel();
+        });
+
+        alert.show();
+    }
+
+    @Override
+    public void onClickAlertOk(String cityName) {
+        mainPresenter.getWeather(cityName);
+    }
+
+    @Override
+    public void onClickAlertCancel() {
+
     }
 }
 

@@ -36,8 +36,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvName.setText(cities.get(position).getCity().getName());
-        holder.tvTemp.setText(cities.get(position).getList()[CURRENT_TEMP]
+        holder.tvTemp.setText(cities.get(position).getListWeather()[CURRENT_TEMP]
                 .getMainWeather().getTemp().toString());
+    }
+
+    public void setData(List<Response> cities) {
+        this.cities = cities;
+        this.notifyDataSetChanged();
     }
 
     @Override

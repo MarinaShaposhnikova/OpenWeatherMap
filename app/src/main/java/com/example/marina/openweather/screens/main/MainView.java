@@ -10,11 +10,17 @@ import java.util.List;
 interface MainView extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
-    void showMessage(String text);
+    void showMessage(int idMessage);
 
     void setData(List<Response> cities);
 
     void showProgressBar();
 
     void hideProgressBar();
+
+    void showAlert();
+
+    void onClickAlertOk(String cityName);
+
+    void onClickAlertCancel();
 }

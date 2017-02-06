@@ -1,11 +1,14 @@
 package com.example.marina.openweather.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Response {
-    private int cod;
+    @SerializedName("cod")
+    private int responseCode;
     private String message;
-    private int cnt;
     private City city;
-    private ListWeather[] list;
+    @SerializedName("list")
+    private ListWeather[] listWeather;
 
     public City getCity() {
         return city;
@@ -15,12 +18,12 @@ public class Response {
         this.city = city;
     }
 
-    public int getCod() {
-        return cod;
+    public int getResponseCode() {
+        return responseCode;
     }
 
-    public void setCod(int cod) {
-        this.cod = cod;
+    public void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 
     public String getMessage() {
@@ -31,19 +34,11 @@ public class Response {
         this.message = message;
     }
 
-    public int getCnt() {
-        return cnt;
+    public ListWeather[] getListWeather() {
+        return listWeather;
     }
 
-    public void setCnt(int cnt) {
-        this.cnt = cnt;
-    }
-
-    public ListWeather[] getList() {
-        return list;
-    }
-
-    public void setList(ListWeather[] list) {
-        this.list = list;
+    public void setListWeather(ListWeather[] listWeather) {
+        this.listWeather = listWeather;
     }
 }
