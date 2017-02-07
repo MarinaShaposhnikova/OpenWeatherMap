@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.marina.openweather.R;
+import com.example.marina.openweather.data.image.GlideLoader;
+import com.example.marina.openweather.data.image.ImageLoader;
 import com.example.marina.openweather.data.model.Response;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -22,9 +23,11 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     private List<Response> cities;
     private final static int CURRENT_TEMP = 0;
     private Context context;
+    private ImageLoader glideLoader;
 
     public CityAdapter(List<Response> cities) {
         this.cities = cities;
+
     }
 
     @Override
@@ -33,6 +36,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_city, parent, false);
         context = parent.getContext();
+        glideLoader = new GlideLoader(context);
 
         ViewHolder holder = new ViewHolder(v);
         return holder;
@@ -44,11 +48,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         holder.tvTemp.setText(cities.get(position).getWeather().get(CURRENT_TEMP)
                 .getMainParameters().getTemp().toString());
         String url = cities.get(position).getWeather().get(CURRENT_TEMP).getWeatherImage().get(CURRENT_TEMP).getIconUrl();
-        //TODO Change Picasso to Glide and add ImageLoader
-        Picasso.with(context)
-                .load(url)
-                .placeholder(R.mipmap.ic_launcher)
-                .into(holder.imgWeather);
+        glideLoader.displayImage(url, holder.imgWeather);
     }
 
     public void setData(List<Response> cities) {
