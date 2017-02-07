@@ -46,9 +46,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        fab.setOnClickListener(view -> {
-            mainPresenter.showAlert();
-        });
+        fab.setOnClickListener(view -> mainPresenter.showAlert());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
