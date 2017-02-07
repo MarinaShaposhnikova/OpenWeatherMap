@@ -34,6 +34,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                     getViewState().setData(responses);
                     hideProgressBar();
                 }, e -> {
+                    hideProgressBar();
                     if (e instanceof HttpException) {
                         HttpException exception = (HttpException) e;
                         if (exception.code() == Constants.BAD_GATEWAY_CODE) {
@@ -58,12 +59,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     void onClickAlertOk(String cityName) {
         getViewState().onClickAlertOk(cityName);
-        //hideProgressBar();
-    }
-
-    void onClickAlertCancel() {
-        getViewState().onClickAlertCancel();
-        //hideProgressBar();
     }
 
     void unSubscribe() {

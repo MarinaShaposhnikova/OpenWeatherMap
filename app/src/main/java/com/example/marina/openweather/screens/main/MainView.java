@@ -21,6 +21,4 @@ interface MainView extends MvpView {
     void showAlert();
 
     void onClickAlertOk(String cityName);
-
-    void onClickAlertCancel();
 }

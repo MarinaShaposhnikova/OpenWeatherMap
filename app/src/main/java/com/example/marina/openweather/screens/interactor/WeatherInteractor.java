@@ -3,7 +3,9 @@ package com.example.marina.openweather.screens.interactor;
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
+import com.example.marina.openweather.data.RetryWhen;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.exception.ErrorResponseException;
 import com.example.marina.openweather.screens.repository.WeatherRepository;
 
 import java.util.List;
@@ -36,21 +38,12 @@ public class WeatherInteractor {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
                         repository.addCity(response);
                     } else {
-                        //TODO test exception
-                        NullPointerException e = new NullPointerException();
-                        throw e;
+                        throw new ErrorResponseException();
                     }
                 })
-                .retryWhen(errors -> errors.flatMap(error -> {
-                    //TODO test exception
-                    if (error instanceof NullPointerException) {
-                        return Observable.just(null);
-                    }
-                    return Observable.error(error);
-                }))
+                .retryWhen(RetryWhen.getDefaultInstance())
                 .map(ignored -> repository.getCities());
     }
-
 
     public void unSubscribe() {
         compositeSubscription.clear();

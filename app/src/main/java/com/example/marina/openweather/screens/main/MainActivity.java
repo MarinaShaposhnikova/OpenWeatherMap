@@ -100,21 +100,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             mainPresenter.onClickAlertOk(input.getText().toString());
         });
 
-        alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
-            mainPresenter.onClickAlertCancel();
-        });
-
         alert.show();
     }
 
     @Override
     public void onClickAlertOk(String cityName) {
         mainPresenter.getWeather(cityName);
-    }
-
-    @Override
-    public void onClickAlertCancel() {
-
     }
 }
 
