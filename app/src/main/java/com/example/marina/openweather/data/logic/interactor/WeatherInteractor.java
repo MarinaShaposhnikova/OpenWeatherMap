@@ -28,12 +28,27 @@ public class WeatherInteractor {
     }
 
     public Observable<List<Response>> getWeatherObservable(String cityName) {
-        return api.getWeatherResponse(cityName, Constants.TOKEN)
+        return api.getWeatherResponse(cityName, Constants.METRIC, Constants.TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
                         repository.addCity(response);
+                    } else {
+                        throw new ErrorResponseException();
+                    }
+                })
+                .retryWhen(RetryWhen.getDefaultInstance())
+                .map(ignored -> repository.getCities());
+    }
+
+    public Observable<List<Response>> getMyWeatherObservable(double lat, double lon) {
+        return api.getMyWeatherResponse(lat, lon, Constants.METRIC, Constants.TOKEN)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(response -> {
+                    if (response.getResponseCode() == Constants.SUCCESS_CODE) {
+                        repository.addCity(Response.getMyCity(response));
                     } else {
                         throw new ErrorResponseException();
                     }

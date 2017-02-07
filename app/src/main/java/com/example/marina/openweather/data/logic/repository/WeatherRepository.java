@@ -1,6 +1,5 @@
 package com.example.marina.openweather.data.logic.repository;
 
-
 import com.example.marina.openweather.data.model.Response;
 
 import java.util.ArrayList;

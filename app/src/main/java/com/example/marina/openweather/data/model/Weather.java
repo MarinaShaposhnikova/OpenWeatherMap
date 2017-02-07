@@ -3,24 +3,32 @@ package com.example.marina.openweather.data.model;
 import com.example.marina.openweather.Constants;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Weather {
-    private MainParameters main;
+    @SerializedName("main")
+    private MainParameters mainParameters;
     @SerializedName("weather")
-    private WeatherImage[] weatherImage;
+    private List<WeatherImage> weatherImage;
+
+    public Weather(MainParameters mainParameters, List<WeatherImage> weatherImage) {
+        this.mainParameters = mainParameters;
+        this.weatherImage = weatherImage;
+    }
 
     public MainParameters getMainParameters() {
-        return main;
+        return mainParameters;
     }
 
-    public void setMainParameters(MainParameters main) {
-        this.main = main;
+    public void setMainParameters(MainParameters mainParameters) {
+        this.mainParameters = mainParameters;
     }
 
-    public WeatherImage[] getWeatherImage() {
+    public List<WeatherImage> getWeatherImage() {
         return weatherImage;
     }
 
-    public void setWeatherImage(WeatherImage[] weatherImage) {
+    public void setWeatherImage(List<WeatherImage> weatherImage) {
         this.weatherImage = weatherImage;
     }
 

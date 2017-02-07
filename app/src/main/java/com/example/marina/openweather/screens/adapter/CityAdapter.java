@@ -41,9 +41,10 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvName.setText(cities.get(position).getCity().getName());
-        holder.tvTemp.setText(cities.get(position).getWeather()[CURRENT_TEMP]
+        holder.tvTemp.setText(cities.get(position).getWeather().get(CURRENT_TEMP)
                 .getMainParameters().getTemp().toString());
-        String url = cities.get(position).getWeather()[CURRENT_TEMP].getWeatherImage()[CURRENT_TEMP].getIconUrl();
+        String url = cities.get(position).getWeather().get(CURRENT_TEMP).getWeatherImage().get(CURRENT_TEMP).getIconUrl();
+        //TODO Change Picasso to Glide and add ImageLoader
         Picasso.with(context)
                 .load(url)
                 .placeholder(R.mipmap.ic_launcher)
