@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.example.marina.openweather.data.adapter.CityAdapter;
+import com.example.marina.openweather.screens.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
 

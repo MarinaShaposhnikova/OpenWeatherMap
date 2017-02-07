@@ -8,4 +8,6 @@ public class Constants {
     public static final String APP_ID = "APPID";
     public static final String QUERY = "q";
     public static final String TOKEN = "cc9ed5b941a832edc6f9b3af73577964";
+    public static final String IMAGE_QUERY = "/img/w/";
+    public static final String IMAGE_FORMAT = ".png";
 }

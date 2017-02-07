@@ -58,7 +58,7 @@ dependencies {
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     apt "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
 
-    compile  "com.google.dagger:dagger:$DAGGER_VERSION"
+    compile "com.google.dagger:dagger:$DAGGER_VERSION"
     apt daggerCompiler
 
     // Mvp
@@ -74,4 +74,7 @@ dependencies {
     //rx
     compile 'io.reactivex:rxjava:1.2.2'
     compile 'io.reactivex:rxandroid:1.2.1'
+
+    //utils
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

@@ -7,7 +7,7 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
-import com.example.marina.openweather.screens.interactor.WeatherInteractor;
+import com.example.marina.openweather.data.logic.interactor.WeatherInteractor;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;

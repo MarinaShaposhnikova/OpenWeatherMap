@@ -1,12 +1,12 @@
-package com.example.marina.openweather.screens.interactor;
+package com.example.marina.openweather.data.logic.interactor;
 
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.RetryWhen;
+import com.example.marina.openweather.data.logic.repository.WeatherRepository;
 import com.example.marina.openweather.data.model.Response;
 import com.example.marina.openweather.exception.ErrorResponseException;
-import com.example.marina.openweather.screens.repository.WeatherRepository;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.example.marina.openweather.screens.main;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.example.marina.openweather.data.model.Response;
@@ -18,5 +19,6 @@ interface MainView extends MvpView {
 
     void hideProgressBar();
 
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showAlert();
 }
