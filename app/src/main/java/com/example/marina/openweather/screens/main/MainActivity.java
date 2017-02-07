@@ -63,12 +63,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mainPresenter.unSubscribe();
-    }
-
-    @Override
     public void setData(List<Response> cities) {
         if (adapter == null) {
             adapter = new CityAdapter(cities);

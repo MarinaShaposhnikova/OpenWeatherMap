@@ -57,7 +57,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().showAlert();
     }
 
-    void unSubscribe() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         compositeSubscription.clear();
     }
 }
