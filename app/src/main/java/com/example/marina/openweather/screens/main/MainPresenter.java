@@ -62,7 +62,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void unSubscribe() {
-        interactor.unSubscribe();
         compositeSubscription.clear();
     }
 }

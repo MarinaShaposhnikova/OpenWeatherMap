@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 public class WeatherInteractor {
 
@@ -23,8 +22,6 @@ public class WeatherInteractor {
     Api api;
     @Inject
     WeatherRepository repository;
-
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     public WeatherInteractor() {
         MyApplication.get().getComponent().inject(this);
@@ -43,9 +40,5 @@ public class WeatherInteractor {
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
                 .map(ignored -> repository.getCities());
-    }
-
-    public void unSubscribe() {
-        compositeSubscription.clear();
     }
 }
