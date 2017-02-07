@@ -1,30 +1,30 @@
 package com.example.marina.openweather.screens.main;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.example.marina.openweather.Api;
-import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.adapter.CityAdapter;
-import com.example.marina.openweather.data.model.City;
-import com.example.marina.openweather.screens.base.BaseActivity;
 import com.example.marina.openweather.R;
-import retrofit2.Retrofit;
-import java.util.ArrayList;
+import com.example.marina.openweather.data.model.Response;
+
 import java.util.List;
 
 
-import javax.inject.Inject;
-import butterknife.BindView;
-import okhttp3.OkHttpClient;
-
-public class MainActivity extends BaseActivity implements MainView {
+public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -34,69 +34,65 @@ public class MainActivity extends BaseActivity implements MainView {
     RecyclerView recyclerView;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-    @Inject
-    Retrofit retrofit;
-    @Inject
-    OkHttpClient okHttpClient;
-    @Inject
-    Api api;
-
-    CityAdapter adapter;
-    List<City> cities = new ArrayList<>();
-
-
+    private CityAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        MyApplication.get().getComponent().inject(this);
-        bind();
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               // mainPresenter.getWeather();
-                MainDialog mainDialog = new MainDialog(MainActivity.this);
-                mainDialog.show();
-
-            }
-        });
+        fab.setOnClickListener(view -> mainPresenter.showAlert());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        mainPresenter.getWeather();
+        mainPresenter.getWeather("Kharkiv");
     }
 
     @Override
-    public void showCities(List<City> cities) {
-        this.cities = cities;
-        if(adapter == null) {
-            adapter = new CityAdapter(this.cities);
-            recyclerView.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
-
-    }
-
-    @Override
-    public void showSnackBar(String text) {
-        Snackbar.make(fab, "Check internet", Snackbar.LENGTH_LONG)
+    public void showMessage(int idMessage) {
+        Snackbar.make(fab, getString(idMessage), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 
-    public void showWeather(){
-        mainPresenter.getWeather();
+    @Override
+    public void setData(List<Response> cities) {
+        if (adapter == null) {
+            adapter = new CityAdapter(cities);
+            recyclerView.setAdapter(adapter);
+        } else {
+            adapter.setData(cities);
+        }
     }
 
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void showAlert() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.enter_city);
+        final EditText input = new EditText(this);
+        alert.setView(input);
+        alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+            mainPresenter.getWeather(input.getText().toString());
+        });
+
+        alert.show();
+    }
 }
 
