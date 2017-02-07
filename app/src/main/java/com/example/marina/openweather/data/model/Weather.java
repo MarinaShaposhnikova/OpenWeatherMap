@@ -1,17 +1,17 @@
 package com.example.marina.openweather.data.model;
 
-public class ListWeather {
-    private MainWeather main;
+public class Weather {
+    private MainParameters main;
 
-    public MainWeather getMainWeather() {
+    public MainParameters getMainWeather() {
         return main;
     }
 
-    public void setMainWeather(MainWeather main) {
+    public void setMainWeather(MainParameters main) {
         this.main = main;
     }
 
-    public class MainWeather{
+    public class MainParameters {
         private Double temp;
 
         public Double getTemp() {

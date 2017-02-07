@@ -8,7 +8,7 @@ public class Response {
     private String message;
     private City city;
     @SerializedName("list")
-    private ListWeather[] listWeather;
+    private Weather[] weather;
 
     public City getCity() {
         return city;
@@ -34,11 +34,11 @@ public class Response {
         this.message = message;
     }
 
-    public ListWeather[] getListWeather() {
-        return listWeather;
+    public Weather[] getWeather() {
+        return weather;
     }
 
-    public void setListWeather(ListWeather[] listWeather) {
-        this.listWeather = listWeather;
+    public void setWeather(Weather[] weather) {
+        this.weather = weather;
     }
 }
