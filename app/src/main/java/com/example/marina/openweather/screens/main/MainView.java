@@ -19,6 +19,4 @@ interface MainView extends MvpView {
     void hideProgressBar();
 
     void showAlert();
-
-    void onClickAlertOk(String cityName);
 }

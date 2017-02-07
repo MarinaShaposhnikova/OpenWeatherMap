@@ -57,10 +57,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().showAlert();
     }
 
-    void onClickAlertOk(String cityName) {
-        getViewState().onClickAlertOk(cityName);
-    }
-
     void unSubscribe() {
         compositeSubscription.clear();
     }

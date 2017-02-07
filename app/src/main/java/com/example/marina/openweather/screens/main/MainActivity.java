@@ -95,15 +95,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         final EditText input = new EditText(this);
         alert.setView(input);
         alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
-            mainPresenter.onClickAlertOk(input.getText().toString());
+            mainPresenter.getWeather(input.getText().toString());
         });
 
         alert.show();
-    }
-
-    @Override
-    public void onClickAlertOk(String cityName) {
-        mainPresenter.getWeather(cityName);
     }
 }
 
