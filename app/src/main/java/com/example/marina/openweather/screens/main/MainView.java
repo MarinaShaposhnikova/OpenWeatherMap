@@ -22,6 +22,7 @@ interface MainView extends MvpView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showAlert();
 
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void dismissAlert();
 
     @StateStrategyType(SkipStrategy.class)

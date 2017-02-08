@@ -39,9 +39,14 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        ObservableFactory
-                .from(SmartLocation.with(context).location())
-                .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude()));
+        if (SmartLocation.with(context).location().state().isAnyProviderAvailable()) {
+            ObservableFactory
+                    .from(SmartLocation.with(context).location())
+                    .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude()));
+        } else {
+            getViewState().showMessage(R.string.location_disabled);
+            hideProgressBar();
+        }
     }
 
     void getCityWeather(String cityName) {
@@ -86,7 +91,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().showAlert();
     }
 
-    void dismissAlert(){
+    void dismissAlert() {
         getViewState().dismissAlert();
     }
 

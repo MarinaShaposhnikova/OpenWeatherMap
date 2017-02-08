@@ -17,7 +17,7 @@ public class GlideLoader implements ImageLoader {
     @Override
     public void displayImage(String url, ImageView imageView) {
         glideManager.load(url)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.weather_icon)
                 .into(imageView);
     }
 }
