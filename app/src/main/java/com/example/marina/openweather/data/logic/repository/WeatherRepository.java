@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherRepository {
-    private List<Response> cities = new ArrayList<>();
+    private static List<Response> cities = new ArrayList<>();
 
     public List<Response> getCities() {
         return new ArrayList<>(cities);
@@ -16,7 +16,11 @@ public class WeatherRepository {
         cities.add(response);
     }
 
-    public void removeCity(Response response){
+    public void removeCity(Response response) {
         cities.remove(response);
+    }
+
+    public void removeCity(int position) {
+        cities.remove(position);
     }
 }

@@ -2,16 +2,19 @@ package com.example.marina.openweather.screens.adapter;
 
 import butterknife.BindView;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.image.ImageLoader;
+import com.example.marina.openweather.data.logic.interactor.WeatherInteractor;
 import com.example.marina.openweather.data.model.Response;
 
 import java.util.List;
@@ -26,6 +29,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     @Inject
     ImageLoader glideLoader;
+    @Inject
+    WeatherInteractor weatherInteractor;
 
     public CityAdapter(List<Response> cities) {
         this.cities = cities;
@@ -49,6 +54,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                 .getMainParameters().getTemp().toString());
         String url = cities.get(position).getWeather().get(CURRENT_TEMP).getWeatherImage().get(CURRENT_TEMP).getIconUrl();
         glideLoader.displayImage(url, holder.imgWeather);
+        holder.btnRemove.setOnClickListener(v -> {
+            v.setBackgroundColor(Color.RED);
+            cities.remove(position);
+            //TODO: if adapter doesn't know anything about interactor change it
+            weatherInteractor.removeCity(position);
+            notifyDataSetChanged();
+        });
     }
 
     public void setData(List<Response> cities) {
@@ -69,6 +81,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         TextView tvTemp;
         @BindView(R.id.imgWeather)
         ImageView imgWeather;
+        @BindView(R.id.btnRemove)
+        ImageButton btnRemove;
 
         ViewHolder(View view) {
             super(view);
