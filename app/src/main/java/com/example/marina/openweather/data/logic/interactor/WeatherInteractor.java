@@ -74,4 +74,20 @@ public class WeatherInteractor {
             return null;
         }
     }
+
+    public Observable<List<Response>> refreshData(){
+        for (Response response : repository.getCities()) {
+            removeCity(response);
+            return getWeatherObservable(response.getCity().getName());
+        }
+        return null;
+    }
+
+    public int getCountCity(){
+        return repository.getCities().size();
+    }
+
+    public void removeCity(Response response){
+        repository.removeCity(response);
+    }
 }

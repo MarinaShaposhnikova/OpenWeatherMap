@@ -1,7 +1,5 @@
 package com.example.marina.openweather.screens.main;
 
-import android.content.Context;
-
 import javax.inject.Inject;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -45,16 +43,16 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getCityWeather(String cityName) {
+        getViewState().showProgressBar();
         getWeather(interactor.getWeatherObservable(cityName));
     }
 
     void getMyWeather(double myLat, double myLon) {
+        getViewState().showProgressBar();
         getWeather(interactor.getMyWeatherObservable(myLat, myLon));
     }
 
     private void getWeather(Observable<List<Response>> observable) {
-        getViewState().showProgressBar();
-
         Subscription subscribe = observable
                 .subscribe(responses -> {
                     getViewState().setData(responses);
@@ -77,8 +75,17 @@ public class MainPresenter extends MvpPresenter<MainView> {
         compositeSubscription.add(subscribe);
     }
 
+    void refreshData() {
+        if (interactor.getCountCity() == 0) {
+            hideProgressBar();
+            return;
+        }
+        getWeather(interactor.refreshData());
+    }
+
     void hideProgressBar() {
         getViewState().hideProgressBar();
+        getViewState().hideSwipeRefresh();
     }
 
     void showAlert() {

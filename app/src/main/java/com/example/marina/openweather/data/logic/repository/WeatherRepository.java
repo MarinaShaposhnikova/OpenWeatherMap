@@ -15,4 +15,8 @@ public class WeatherRepository {
     public void addCity(Response response) {
         cities.add(response);
     }
+
+    public void removeCity(Response response){
+        cities.remove(response);
+    }
 }
