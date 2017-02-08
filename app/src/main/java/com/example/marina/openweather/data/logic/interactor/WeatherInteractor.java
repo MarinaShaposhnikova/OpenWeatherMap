@@ -1,5 +1,8 @@
 package com.example.marina.openweather.data.logic.interactor;
 
+import android.content.Context;
+import android.location.Location;
+
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
@@ -12,6 +15,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.nlopez.smartlocation.SmartLocation;
+import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -22,6 +27,10 @@ public class WeatherInteractor {
     Api api;
     @Inject
     WeatherRepository repository;
+    @Inject
+    Context context;
+    @Inject
+    SmartLocation.LocationControl locationControl;
 
     public WeatherInteractor() {
         MyApplication.get().getComponent().inject(this);
@@ -55,5 +64,14 @@ public class WeatherInteractor {
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
                 .map(ignored -> repository.getCities());
+    }
+
+    public Observable<Location> getLocation() {
+        if (locationControl.state().isAnyProviderAvailable()) {
+            return ObservableFactory
+                    .from(locationControl);
+        } else {
+            return null;
+        }
     }
 }

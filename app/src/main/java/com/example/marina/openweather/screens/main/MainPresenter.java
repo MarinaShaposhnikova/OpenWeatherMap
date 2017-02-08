@@ -15,8 +15,6 @@ import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
 
-import io.nlopez.smartlocation.SmartLocation;
-import io.nlopez.smartlocation.rx.ObservableFactory;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscription;
@@ -27,8 +25,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     @Inject
     WeatherInteractor interactor;
-    @Inject
-    Context context;
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
@@ -39,9 +35,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        if (SmartLocation.with(context).location().state().isAnyProviderAvailable()) {
-            ObservableFactory
-                    .from(SmartLocation.with(context).location())
+        if (interactor.getLocation() != null) {
+            interactor.getLocation()
                     .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude()));
         } else {
             getViewState().showMessage(R.string.location_disabled);
@@ -81,7 +76,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
         compositeSubscription.add(subscribe);
     }
-
 
     void hideProgressBar() {
         getViewState().hideProgressBar();

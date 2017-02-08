@@ -19,6 +19,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.nlopez.smartlocation.SmartLocation;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -80,5 +81,16 @@ public class AppModule {
     @Provides
     WeatherRepository provideRepository() {
         return new WeatherRepository();
+    }
+
+    @Provides
+    ImageLoader provideGlide() {
+        return new GlideLoader(mApplicationContext);
+    }
+
+    @Provides
+    @Singleton
+    SmartLocation.LocationControl provideLocationControl(){
+        return SmartLocation.with(mApplicationContext).location().oneFix();
     }
 }
