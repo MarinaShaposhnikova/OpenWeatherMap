@@ -2,7 +2,7 @@ package com.example.marina.openweather.injection.component;
 
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.injection.module.AppModule;
-import com.example.marina.openweather.screens.interactor.WeatherInteractor;
+import com.example.marina.openweather.data.logic.interactor.WeatherInteractor;
 import com.example.marina.openweather.screens.main.MainPresenter;
 
 import javax.inject.Singleton;

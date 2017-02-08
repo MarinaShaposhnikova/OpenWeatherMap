@@ -1,12 +1,12 @@
-package com.example.marina.openweather.screens.interactor;
+package com.example.marina.openweather.data.logic.interactor;
 
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.RetryWhen;
+import com.example.marina.openweather.data.logic.repository.WeatherRepository;
 import com.example.marina.openweather.data.model.Response;
 import com.example.marina.openweather.exception.ErrorResponseException;
-import com.example.marina.openweather.screens.repository.WeatherRepository;
 
 import java.util.List;
 
@@ -28,12 +28,27 @@ public class WeatherInteractor {
     }
 
     public Observable<List<Response>> getWeatherObservable(String cityName) {
-        return api.getWeatherResponse(cityName, Constants.TOKEN)
+        return api.getWeatherResponse(cityName, Constants.METRIC, Constants.TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
                         repository.addCity(response);
+                    } else {
+                        throw new ErrorResponseException();
+                    }
+                })
+                .retryWhen(RetryWhen.getDefaultInstance())
+                .map(ignored -> repository.getCities());
+    }
+
+    public Observable<List<Response>> getMyWeatherObservable(double lat, double lon) {
+        return api.getMyWeatherResponse(lat, lon, Constants.METRIC, Constants.TOKEN)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(response -> {
+                    if (response.getResponseCode() == Constants.SUCCESS_CODE) {
+                        repository.addCity(Response.getMyCity(response));
                     } else {
                         throw new ErrorResponseException();
                     }
