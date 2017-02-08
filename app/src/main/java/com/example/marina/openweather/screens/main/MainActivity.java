@@ -7,6 +7,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -45,6 +46,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     ProgressBar progressBar;
 
     private CityAdapter adapter;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,15 +86,22 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showAlert() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle(R.string.enter_city);
         final EditText input = new EditText(this);
-        alert.setView(input);
-        alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
-            mainPresenter.getCityWeather(input.getText().toString());
-        });
+        alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.enter_city)
+                .setView(input)
+                .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+                    mainPresenter.getCityWeather(input.getText().toString());
+                })
+                .setOnDismissListener(dialog -> mainPresenter.dismissAlert())
+                .show();
+    }
 
-        alert.show();
+    @Override
+    public void dismissAlert() {
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 
     @Override

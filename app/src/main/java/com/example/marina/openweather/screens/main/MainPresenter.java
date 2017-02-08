@@ -86,6 +86,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().showAlert();
     }
 
+    void dismissAlert(){
+        getViewState().dismissAlert();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
