@@ -90,7 +90,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SmartLocation.LocationControl provideLocationControl(){
+    SmartLocation.LocationControl provideLocationControl() {
         return SmartLocation.with(mApplicationContext).location().oneFix();
     }
 }

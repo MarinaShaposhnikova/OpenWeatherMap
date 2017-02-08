@@ -18,6 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -26,12 +27,13 @@ import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.screens.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.screens.listener.MyItemTouchHelper;
+import com.example.marina.openweather.screens.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.List;
 
-
-public class MainActivity extends MvpAppCompatActivity implements MainView {
+public class MainActivity extends MvpAppCompatActivity implements MainView, TouchCallback {
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -46,7 +48,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-
     private CityAdapter adapter;
     private AlertDialog alertDialog;
 
@@ -57,6 +58,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         fab.setOnClickListener(view -> mainPresenter.showAlert());
+
+        ItemTouchHelper.Callback callback = new MyItemTouchHelper(this);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         swipeRefresh.setOnRefreshListener(() -> mainPresenter.refreshData());
     }
@@ -135,5 +141,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             requestPermissions();
         }
     }
-}
 
+    @Override
+    public void onDismiss(int position) {
+        mainPresenter.removeCity(position);
+    }
+}

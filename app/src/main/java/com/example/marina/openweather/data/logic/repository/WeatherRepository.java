@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherRepository {
-    private static List<Response> cities = new ArrayList<>();
+    private List<Response> cities = new ArrayList<>();
 
     public List<Response> getCities() {
         return new ArrayList<>(cities);

@@ -87,6 +87,10 @@ public class WeatherInteractor {
         return repository.getCities().size();
     }
 
+    public List<Response> getCities(){
+        return repository.getCities();
+    }
+
     public void removeCity(Response response) {
         repository.removeCity(response);
     }
