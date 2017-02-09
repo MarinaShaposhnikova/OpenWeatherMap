@@ -1,4 +1,4 @@
-package com.example.marina.openweather.screens.listener;
+package com.example.marina.openweather.screens.main.listener;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,14 +16,14 @@ import android.view.View;
 import com.example.marina.openweather.R;
 
 
-public class MyItemTouchHelper extends ItemTouchHelper.Callback {
+public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
     private TouchCallback touchCallback;
     private Bitmap icon;
     private Drawable background;
     private Paint mPaint;
     private boolean mIsInitiated;
 
-    public MyItemTouchHelper(TouchCallback touchCallback) {
+    public DeleteItemTouchHelper(TouchCallback touchCallback) {
         this.touchCallback = touchCallback;
     }
 

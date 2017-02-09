@@ -1,4 +1,4 @@
-package com.example.marina.openweather.data.logic.repository;
+package com.example.marina.openweather.data.repository;
 
 import com.example.marina.openweather.data.model.Response;
 

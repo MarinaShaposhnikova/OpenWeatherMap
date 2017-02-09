@@ -1,4 +1,4 @@
-package com.example.marina.openweather.screens.adapter;
+package com.example.marina.openweather.screens.main.adapter;
 
 import butterknife.BindView;
 

@@ -7,9 +7,8 @@ import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.image.GlideLoader;
 import com.example.marina.openweather.data.image.ImageLoader;
-import com.example.marina.openweather.data.image.PicassoLoader;
-import com.example.marina.openweather.data.logic.interactor.WeatherInteractor;
-import com.example.marina.openweather.data.logic.repository.WeatherRepository;
+import com.example.marina.openweather.data.interactor.WeatherInteractor;
+import com.example.marina.openweather.data.repository.WeatherRepository;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.io.File;

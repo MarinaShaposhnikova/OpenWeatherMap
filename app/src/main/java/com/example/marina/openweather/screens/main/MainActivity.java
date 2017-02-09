@@ -8,7 +8,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,12 +24,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.marina.openweather.Constants;
-import com.example.marina.openweather.data.model.City;
-import com.example.marina.openweather.screens.adapter.CityAdapter;
+import com.example.marina.openweather.screens.main.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
-import com.example.marina.openweather.screens.listener.MyItemTouchHelper;
-import com.example.marina.openweather.screens.listener.TouchCallback;
+import com.example.marina.openweather.screens.main.listener.DeleteItemTouchHelper;
+import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         setSupportActionBar(toolbar);
         fab.setOnClickListener(view -> mainPresenter.showAlert());
 
-        ItemTouchHelper.Callback callback = new MyItemTouchHelper(this);
+        ItemTouchHelper.Callback callback = new DeleteItemTouchHelper(this);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
 
@@ -95,6 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     @Override
     public void showAlert() {
         final EditText input = new EditText(this);
+        input.setSingleLine();
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.enter_city)
                 .setView(input)
@@ -112,12 +111,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         }
     }
 
+
     @Override
     public void requestPermissions() {
         RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions.request(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION})
+                Manifest.permission.ACCESS_FINE_LOCATION})
                 .subscribe(granted -> {
                     if (granted) {
                         mainPresenter.getLocation();
