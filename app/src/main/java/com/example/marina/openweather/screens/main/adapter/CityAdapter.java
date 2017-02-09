@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.image.ImageLoader;
-import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.data.model.CityObject;
 
 import java.util.List;
 
@@ -21,16 +21,14 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
-    private List<Response> cities;
-    private final static int CURRENT_TEMP = 0;
+    private List<CityObject> cities;
 
     @Inject
     ImageLoader glideLoader;
 
-    public CityAdapter(List<Response> cities) {
+    public CityAdapter(List<CityObject> cities) {
         this.cities = cities;
         MyApplication.get().getComponent().inject(this);
-
     }
 
     @Override
@@ -44,14 +42,13 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvName.setText(cities.get(position).getCity().getName());
-        holder.tvTemp.setText(cities.get(position).getWeather().get(CURRENT_TEMP)
-                .getMainParameters().getTemp().toString());
-        String url = cities.get(position).getWeather().get(CURRENT_TEMP).getWeatherImage().get(CURRENT_TEMP).getIconUrl();
+        holder.tvName.setText(cities.get(position).getName());
+        holder.tvTemp.setText(cities.get(position).getTemp().toString());
+        String url = cities.get(position).getUrl();
         glideLoader.displayImage(url, holder.imgWeather);
     }
 
-    public void setData(List<Response> cities) {
+    public void setData(List<CityObject> cities) {
         this.cities = cities;
         notifyDataSetChanged();
     }

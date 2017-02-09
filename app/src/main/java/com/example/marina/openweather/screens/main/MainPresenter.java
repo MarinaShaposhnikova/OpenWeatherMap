@@ -8,7 +8,7 @@ import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.interactor.WeatherInteractor;
-import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
@@ -53,10 +53,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getWeather(interactor.getMyWeatherObservable(myLat, myLon));
     }
 
-    private void getWeather(Observable<List<Response>> observable) {
+    private void getWeather(Observable<List<CityObject>> observable) {
         Subscription subscribe = observable
-                .subscribe(responses -> {
-                    getViewState().setData(responses);
+                .subscribe(cities -> {
+                    getViewState().setData(cities);
                     hideProgressBar();
                 }, e -> {
                     hideProgressBar();
@@ -89,7 +89,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().setData(interactor.getCities());
     }
 
-    void hideProgressBar() {
+    private void hideProgressBar() {
         getViewState().hideProgressBar();
         getViewState().hideSwipeRefresh();
     }
