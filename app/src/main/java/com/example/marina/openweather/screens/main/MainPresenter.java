@@ -78,7 +78,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
     void refreshData() {
         if (interactor.getCountCity() == 0) {
             hideProgressBar();
-            getViewState().setData(interactor.getCities());
             return;
         }
         getWeather(interactor.refreshData());
@@ -86,6 +85,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void removeCity(int position) {
         interactor.removeCity(position);
+        getViewState().setData(interactor.getCities());
     }
 
     void hideProgressBar() {

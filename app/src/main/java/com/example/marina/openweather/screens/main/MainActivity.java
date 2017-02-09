@@ -8,6 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.marina.openweather.Constants;
+import com.example.marina.openweather.data.model.City;
 import com.example.marina.openweather.screens.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
@@ -31,6 +33,7 @@ import com.example.marina.openweather.screens.listener.MyItemTouchHelper;
 import com.example.marina.openweather.screens.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView, TouchCallback {
@@ -48,7 +51,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
 
-    private CityAdapter adapter;
+    private CityAdapter adapter = new CityAdapter(new ArrayList<>());
     private AlertDialog alertDialog;
 
     @Override
@@ -63,6 +66,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
 
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         swipeRefresh.setOnRefreshListener(() -> mainPresenter.refreshData());
     }
@@ -75,12 +79,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
 
     @Override
     public void setData(List<Response> cities) {
-        if (adapter == null) {
-            adapter = new CityAdapter(cities);
-            recyclerView.setAdapter(adapter);
-        } else {
-            adapter.setData(cities);
-        }
+        adapter.setData(cities);
     }
 
     @Override

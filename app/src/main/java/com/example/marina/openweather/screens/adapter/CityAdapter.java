@@ -53,8 +53,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     public void setData(List<Response> cities) {
         this.cities = cities;
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemCount() {

@@ -87,7 +87,7 @@ public class WeatherInteractor {
         return repository.getCities().size();
     }
 
-    public List<Response> getCities(){
+    public List<Response> getCities() {
         return repository.getCities();
     }
 
