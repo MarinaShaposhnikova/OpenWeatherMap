@@ -33,14 +33,13 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        if (interactor.getLocation() != null) {
-            interactor.getLocation()
-                    .subscribe((location -> getMyWeather(location.getLatitude(), location.getLongitude()))
-                            , error -> System.out.print(error.toString()));
-        } else {
-            getViewState().showMessage(R.string.location_disabled);
-            hideProgressBar();
-        }
+        interactor.getLocation()
+                .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude())
+                        , error -> {
+                            getViewState().showMessage(R.string.location_disabled);
+                            getViewState().setData(interactor.getCities());
+                            hideProgressBar();
+                        });
     }
 
     void getCityWeather(String cityName) {

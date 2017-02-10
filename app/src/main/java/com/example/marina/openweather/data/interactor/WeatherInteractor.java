@@ -11,6 +11,7 @@ import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.data.model.MyCity;
 import com.example.marina.openweather.data.repository.WeatherRepository;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.exception.DisabledLocationException;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
@@ -73,7 +74,7 @@ public class WeatherInteractor {
             return ObservableFactory
                     .from(locationControl);
         } else {
-            return null;
+            return Observable.error(new DisabledLocationException());
         }
     }
 
@@ -103,8 +104,10 @@ public class WeatherInteractor {
     }
 
     private CityObject createCityRealm(MyCity myCity) {
-        return new CityObject(myCity.getName(),
+        CityObject city = new CityObject(myCity.getName(),
                 myCity.getMainParameters().getTemp(),
                 myCity.getWeatherImage().get(0).getIconUrl());
+        city.setMyCity(true);
+        return city;
     }
 }

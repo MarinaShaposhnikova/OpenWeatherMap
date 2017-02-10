@@ -8,6 +8,7 @@ public class CityObject extends RealmObject {
     private String name;
     private Double temp;
     private String url;
+    private boolean isMyCity;
 
     public CityObject() {
     }
@@ -40,5 +41,13 @@ public class CityObject extends RealmObject {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isMyCity() {
+        return isMyCity;
+    }
+
+    public void setMyCity(boolean myCity) {
+        isMyCity = myCity;
     }
 }

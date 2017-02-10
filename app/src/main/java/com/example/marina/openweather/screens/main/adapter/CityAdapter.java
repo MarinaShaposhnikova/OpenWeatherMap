@@ -1,7 +1,5 @@
 package com.example.marina.openweather.screens.main.adapter;
 
-import butterknife.BindView;
-
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
@@ -32,8 +31,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     }
 
     @Override
-    public CityAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent,
+                                         int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_city, parent, false);
         ViewHolder holder = new ViewHolder(v);
@@ -46,6 +45,11 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         holder.tvTemp.setText(cities.get(position).getTemp().toString());
         String url = cities.get(position).getUrl();
         glideLoader.displayImage(url, holder.imgWeather);
+        if (cities.get(position).isMyCity()) {
+            holder.imgPin.setVisibility(View.VISIBLE);
+        } else {
+            holder.imgPin.setVisibility(View.GONE);
+        }
     }
 
     public void setData(List<CityObject> cities) {
@@ -53,7 +57,7 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public CityObject getCurrentCity(int position){
+    public CityObject getCurrentCity(int position) {
         return cities.get(position);
     }
 
@@ -71,6 +75,8 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         TextView tvTemp;
         @BindView(R.id.imgWeather)
         ImageView imgWeather;
+        @BindView(R.id.imgPin)
+        ImageView imgPin;
 
         ViewHolder(View view) {
             super(view);
