@@ -15,4 +15,5 @@ public class Constants {
     public static final String IMAGE_QUERY = "/img/w/";
     public static final String IMAGE_FORMAT = ".png";
     public static final int ACCESS_LOCATION = 1;
+    public static final String PRIMARY_KEY = "name";
 }

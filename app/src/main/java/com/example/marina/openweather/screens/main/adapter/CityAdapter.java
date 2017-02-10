@@ -53,6 +53,10 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public CityObject getCurrentCity(int position){
+        return cities.get(position);
+    }
+
 
     @Override
     public int getItemCount() {

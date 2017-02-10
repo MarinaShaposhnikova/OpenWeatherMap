@@ -84,8 +84,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getWeather(interactor.refreshData());
     }
 
-    void removeCity(int position) {
-        interactor.removeCity(position);
+    void removeCity(CityObject cityObject) {
+        interactor.removeCity(cityObject);
         getViewState().setData(interactor.getCities());
     }
 

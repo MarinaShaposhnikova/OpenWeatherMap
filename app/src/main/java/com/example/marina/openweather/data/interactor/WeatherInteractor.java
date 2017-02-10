@@ -79,7 +79,6 @@ public class WeatherInteractor {
 
     public Observable<List<CityObject>> refreshData() {
         for (CityObject city : repository.getCitiesObject()) {
-            removeCity(city);
             return getWeatherObservable(city.getName());
         }
         return null;
@@ -95,10 +94,6 @@ public class WeatherInteractor {
 
     public void removeCity(CityObject city) {
         repository.removeCity(city);
-    }
-
-    public void removeCity(int position) {
-        repository.removeCity(position);
     }
 
     private CityObject createCityRealm(Response response) {

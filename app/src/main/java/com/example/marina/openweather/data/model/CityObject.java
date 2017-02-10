@@ -10,7 +10,6 @@ public class CityObject extends RealmObject {
     private String url;
 
     public CityObject() {
-
     }
 
     public CityObject(String name, Double temp, String url) {

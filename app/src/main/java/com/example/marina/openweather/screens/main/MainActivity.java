@@ -142,6 +142,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
 
     @Override
     public void onDismiss(int position) {
-        mainPresenter.removeCity(position);
+        mainPresenter.removeCity(adapter.getCurrentCity(position));
     }
 }
