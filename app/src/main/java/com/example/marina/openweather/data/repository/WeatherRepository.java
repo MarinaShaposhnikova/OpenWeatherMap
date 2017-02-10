@@ -1,26 +1,44 @@
 package com.example.marina.openweather.data.repository;
 
-import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.Constants;
+import com.example.marina.openweather.MyApplication;
+import com.example.marina.openweather.data.model.CityObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class WeatherRepository {
-    private List<Response> cities = new ArrayList<>();
+    @Inject
+    Realm realm;
 
-    public List<Response> getCities() {
-        return new ArrayList<>(cities);
+    public WeatherRepository() {
+        MyApplication.get().getComponent().inject(this);
     }
 
-    public void addCity(Response response) {
-        cities.add(response);
+    public List<CityObject> getCitiesObject() {
+        RealmResults<CityObject> citiesDB = realm.where(CityObject.class)
+                .findAll();
+        return new ArrayList<>(citiesDB.sort(Constants.PRIMARY_KEY));
     }
 
-    public void removeCity(Response response) {
-        cities.remove(response);
+    public void addCityObject(CityObject city) {
+        addCity(city);
     }
 
-    public void removeCity(int position) {
-        cities.remove(position);
+    public void removeCity(CityObject city) {
+        deleteCity(city);
+    }
+
+    private void addCity(CityObject city) {
+        realm.executeTransaction(realmObject -> realmObject.copyToRealmOrUpdate(city));
+    }
+
+    private void deleteCity(CityObject cityObject) {
+        realm.executeTransaction(realmObject -> cityObject.deleteFromRealm());
     }
 }

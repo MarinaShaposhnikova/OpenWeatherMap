@@ -19,6 +19,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.nlopez.smartlocation.SmartLocation;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -91,5 +93,14 @@ public class AppModule {
     @Singleton
     SmartLocation.LocationControl provideLocationControl() {
         return SmartLocation.with(mApplicationContext).location().oneFix();
+    }
+
+    @Provides
+    @Singleton
+    Realm provideRealm() {
+        Realm.init(mApplicationContext);
+        final RealmConfiguration config = new RealmConfiguration.Builder().build();
+        Realm.setDefaultConfiguration(config);
+        return Realm.getInstance(config);
     }
 }

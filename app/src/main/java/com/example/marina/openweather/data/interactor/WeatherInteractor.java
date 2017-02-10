@@ -7,8 +7,11 @@ import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.RetryWhen;
+import com.example.marina.openweather.data.model.CityObject;
+import com.example.marina.openweather.data.model.MyCity;
 import com.example.marina.openweather.data.repository.WeatherRepository;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.exception.DisabledLocationException;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
@@ -36,34 +39,34 @@ public class WeatherInteractor {
         MyApplication.get().getComponent().inject(this);
     }
 
-    public Observable<List<Response>> getWeatherObservable(String cityName) {
+    public Observable<List<CityObject>> getWeatherObservable(String cityName) {
         return api.getWeatherResponse(cityName, Constants.METRIC, Constants.TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
-                        repository.addCity(response);
+                        repository.addCityObject(createCityRealm(response));
                     } else {
                         throw new ErrorResponseException();
                     }
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
-                .map(ignored -> repository.getCities());
+                .map(ignored -> repository.getCitiesObject());
     }
 
-    public Observable<List<Response>> getMyWeatherObservable(double lat, double lon) {
+    public Observable<List<CityObject>> getMyWeatherObservable(double lat, double lon) {
         return api.getMyWeatherResponse(lat, lon, Constants.METRIC, Constants.TOKEN)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
-                        repository.addCity(Response.getMyCity(response));
+                        repository.addCityObject(createCityRealm(response));
                     } else {
                         throw new ErrorResponseException();
                     }
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
-                .map(ignored -> repository.getCities());
+                .map(ignored -> repository.getCitiesObject());
     }
 
     public Observable<Location> getLocation() {
@@ -71,31 +74,40 @@ public class WeatherInteractor {
             return ObservableFactory
                     .from(locationControl);
         } else {
-            return null;
+            return Observable.error(new DisabledLocationException());
         }
     }
 
-    public Observable<List<Response>> refreshData() {
-        for (Response response : repository.getCities()) {
-            removeCity(response);
-            return getWeatherObservable(response.getCity().getName());
+    public Observable<List<CityObject>> refreshData() {
+        for (CityObject city : repository.getCitiesObject()) {
+            return getWeatherObservable(city.getName());
         }
         return null;
     }
 
     public int getCountCity() {
-        return repository.getCities().size();
+        return repository.getCitiesObject().size();
     }
 
-    public List<Response> getCities() {
-        return repository.getCities();
+    public List<CityObject> getCities() {
+        return repository.getCitiesObject();
     }
 
-    public void removeCity(Response response) {
-        repository.removeCity(response);
+    public void removeCity(CityObject city) {
+        repository.removeCity(city);
     }
 
-    public void removeCity(int position) {
-        repository.removeCity(position);
+    private CityObject createCityRealm(Response response) {
+        return new CityObject(response.getCity().getName(),
+                response.getWeather().get(0).getMainParameters().getTemp(),
+                response.getWeather().get(0).getWeatherImage().get(0).getIconUrl());
+    }
+
+    private CityObject createCityRealm(MyCity myCity) {
+        CityObject city = new CityObject(myCity.getName(),
+                myCity.getMainParameters().getTemp(),
+                myCity.getWeatherImage().get(0).getIconUrl());
+        city.setMyCity(true);
+        return city;
     }
 }

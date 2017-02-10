@@ -24,9 +24,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.marina.openweather.Constants;
+import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.screens.main.adapter.CityAdapter;
 import com.example.marina.openweather.R;
-import com.example.marina.openweather.data.model.Response;
 import com.example.marina.openweather.screens.main.listener.DeleteItemTouchHelper;
 import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -76,7 +76,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     }
 
     @Override
-    public void setData(List<Response> cities) {
+    public void setData(List<CityObject> cities) {
         adapter.setData(cities);
     }
 
@@ -142,6 +142,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
 
     @Override
     public void onDismiss(int position) {
-        mainPresenter.removeCity(position);
+        mainPresenter.removeCity(adapter.getCurrentCity(position));
     }
 }

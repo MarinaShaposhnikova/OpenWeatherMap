@@ -8,7 +8,7 @@ import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.interactor.WeatherInteractor;
-import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
@@ -33,14 +33,13 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        if (interactor.getLocation() != null) {
-            interactor.getLocation()
-                    .subscribe((location -> getMyWeather(location.getLatitude(), location.getLongitude()))
-                            , error -> System.out.print(error.toString()));
-        } else {
-            getViewState().showMessage(R.string.location_disabled);
-            hideProgressBar();
-        }
+        interactor.getLocation()
+                .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude())
+                        , error -> {
+                            getViewState().showMessage(R.string.location_disabled);
+                            getViewState().setData(interactor.getCities());
+                            hideProgressBar();
+                        });
     }
 
     void getCityWeather(String cityName) {
@@ -53,10 +52,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getWeather(interactor.getMyWeatherObservable(myLat, myLon));
     }
 
-    private void getWeather(Observable<List<Response>> observable) {
+    private void getWeather(Observable<List<CityObject>> observable) {
         Subscription subscribe = observable
-                .subscribe(responses -> {
-                    getViewState().setData(responses);
+                .subscribe(cities -> {
+                    getViewState().setData(cities);
                     hideProgressBar();
                 }, e -> {
                     hideProgressBar();
@@ -84,12 +83,12 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getWeather(interactor.refreshData());
     }
 
-    void removeCity(int position) {
-        interactor.removeCity(position);
+    void removeCity(CityObject cityObject) {
+        interactor.removeCity(cityObject);
         getViewState().setData(interactor.getCities());
     }
 
-    void hideProgressBar() {
+    private void hideProgressBar() {
         getViewState().hideProgressBar();
         getViewState().hideSwipeRefresh();
     }

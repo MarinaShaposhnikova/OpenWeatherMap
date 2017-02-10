@@ -20,8 +20,8 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
     private TouchCallback touchCallback;
     private Bitmap icon;
     private Drawable background;
-    private Paint mPaint;
-    private boolean mIsInitiated;
+    private Paint paint;
+    private boolean isInitiated;
 
     public DeleteItemTouchHelper(TouchCallback touchCallback) {
         this.touchCallback = touchCallback;
@@ -54,7 +54,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
                 return;
             }
 
-            if (!mIsInitiated) {
+            if (!isInitiated) {
                 init(recyclerView.getContext());
             }
 
@@ -67,7 +67,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
             final int imageX = itemView.getLeft() + (int) dX / 2 - icon.getWidth() / 2;
             final int imageY = itemHeight / 2 + itemView.getTop() - icon.getHeight() / 2;
 
-            c.drawBitmap(icon, imageX, imageY, mPaint);
+            c.drawBitmap(icon, imageX, imageY, paint);
 
             final float translationX = Math.min(-dX, itemWidth / 2);
             viewHolder.itemView.setTranslationX(-translationX);
@@ -87,8 +87,8 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
     private void init(Context context) {
         background = new ColorDrawable(ContextCompat.getColor(context, R.color.red));
         icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.trash_bin);
-        mPaint = new Paint();
-        mPaint.setColor(Color.GREEN);
-        mIsInitiated = true;
+        paint = new Paint();
+        paint.setColor(Color.GREEN);
+        isInitiated = true;
     }
 }
