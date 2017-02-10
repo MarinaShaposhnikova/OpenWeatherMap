@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.example.marina.openweather.R;
 
-
 public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
     private TouchCallback touchCallback;
     private Bitmap icon;
@@ -41,6 +40,9 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+        if (viewHolder.getAdapterPosition() == 0) {
+            return;
+        }
         touchCallback.onDismiss(viewHolder.getAdapterPosition());
     }
 
@@ -50,7 +52,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             final View itemView = viewHolder.itemView;
-            if (viewHolder.getAdapterPosition() == -1) {
+            if (viewHolder.getAdapterPosition() == -1 || viewHolder.getAdapterPosition() == 0) {
                 return;
             }
 

@@ -15,5 +15,6 @@ public class Constants {
     public static final String IMAGE_QUERY = "/img/w/";
     public static final String IMAGE_FORMAT = ".png";
     public static final int ACCESS_LOCATION = 1;
-    public static final String PRIMARY_KEY = "name";
+    public static final String MY_CITY = "isMyCity";
+    public static final String DB_SORT = "position";
 }

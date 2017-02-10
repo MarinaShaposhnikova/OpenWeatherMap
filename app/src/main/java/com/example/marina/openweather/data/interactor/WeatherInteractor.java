@@ -51,7 +51,7 @@ public class WeatherInteractor {
                     }
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
-                .map(ignored -> repository.getCitiesObject());
+                .map(ignored -> repository.getAllCitiesObject());
     }
 
     public Observable<List<CityObject>> getMyWeatherObservable(double lat, double lon) {
@@ -60,13 +60,13 @@ public class WeatherInteractor {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(response -> {
                     if (response.getResponseCode() == Constants.SUCCESS_CODE) {
-                        repository.addCityObject(createCityRealm(response));
+                        repository.addMyCity(createCityRealm(response));
                     } else {
                         throw new ErrorResponseException();
                     }
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
-                .map(ignored -> repository.getCitiesObject());
+                .map(ignored -> repository.getAllCitiesObject());
     }
 
     public Observable<Location> getLocation() {
@@ -79,18 +79,18 @@ public class WeatherInteractor {
     }
 
     public Observable<List<CityObject>> refreshData() {
-        for (CityObject city : repository.getCitiesObject()) {
+        for (CityObject city : repository.getCities()) {
             return getWeatherObservable(city.getName());
         }
-        return null;
+        return Observable.error(new Throwable());
     }
 
     public int getCountCity() {
-        return repository.getCitiesObject().size();
+        return repository.getAllCitiesObject().size();
     }
 
     public List<CityObject> getCities() {
-        return repository.getCitiesObject();
+        return repository.getAllCitiesObject();
     }
 
     public void removeCity(CityObject city) {
