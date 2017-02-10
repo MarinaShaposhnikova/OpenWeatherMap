@@ -9,6 +9,7 @@ public class CityObject extends RealmObject {
     private Double temp;
     private String url;
     private boolean isMyCity;
+    private int position;
 
     public CityObject() {
     }
@@ -49,5 +50,13 @@ public class CityObject extends RealmObject {
 
     public void setMyCity(boolean myCity) {
         isMyCity = myCity;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
