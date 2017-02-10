@@ -1,4 +1,4 @@
-package com.example.marina.openweather.data.logic.repository;
+package com.example.marina.openweather.data.repository;
 
 import com.example.marina.openweather.data.model.Response;
 
@@ -14,5 +14,13 @@ public class WeatherRepository {
 
     public void addCity(Response response) {
         cities.add(response);
+    }
+
+    public void removeCity(Response response) {
+        cities.remove(response);
+    }
+
+    public void removeCity(int position) {
+        cities.remove(position);
     }
 }

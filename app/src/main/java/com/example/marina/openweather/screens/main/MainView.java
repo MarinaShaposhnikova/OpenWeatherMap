@@ -27,4 +27,6 @@ interface MainView extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
     void requestPermissions();
+
+    void hideSwipeRefresh();
 }

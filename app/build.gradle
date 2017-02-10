@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    final PLAY_SERVICES_VERSION = '9.8.0'
+    final PLAY_SERVICES_VERSION = '10.0.1'
     final SUPPORT_LIBRARY_VERSION = '24.2.1'
     final RETROFIT_VERSION = '2.1.0'
     final DAGGER_VERSION = '2.7'
@@ -74,9 +74,11 @@ dependencies {
     //rx
     compile 'io.reactivex:rxjava:1.2.2'
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
 
     //utils
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'io.nlopez.smartlocation:library:3.2.11'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
 }

@@ -1,7 +1,5 @@
 package com.example.marina.openweather.screens.main;
 
-import android.content.Context;
-
 import javax.inject.Inject;
 
 import com.arellomobile.mvp.InjectViewState;
@@ -9,14 +7,12 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
-import com.example.marina.openweather.data.logic.interactor.WeatherInteractor;
+import com.example.marina.openweather.data.interactor.WeatherInteractor;
 import com.example.marina.openweather.data.model.Response;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
 import java.util.List;
 
-import io.nlopez.smartlocation.SmartLocation;
-import io.nlopez.smartlocation.rx.ObservableFactory;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscription;
@@ -27,8 +23,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     @Inject
     WeatherInteractor interactor;
-    @Inject
-    Context context;
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
@@ -39,10 +33,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        if (SmartLocation.with(context).location().state().isAnyProviderAvailable()) {
-            ObservableFactory
-                    .from(SmartLocation.with(context).location())
-                    .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude()));
+        if (interactor.getLocation() != null) {
+            interactor.getLocation()
+                    .subscribe((location -> getMyWeather(location.getLatitude(), location.getLongitude()))
+                            , error -> System.out.print(error.toString()));
         } else {
             getViewState().showMessage(R.string.location_disabled);
             hideProgressBar();
@@ -50,16 +44,16 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getCityWeather(String cityName) {
+        getViewState().showProgressBar();
         getWeather(interactor.getWeatherObservable(cityName));
     }
 
-    void getMyWeather(double myLat, double myLon) {
+    private void getMyWeather(double myLat, double myLon) {
+        getViewState().showProgressBar();
         getWeather(interactor.getMyWeatherObservable(myLat, myLon));
     }
 
     private void getWeather(Observable<List<Response>> observable) {
-        getViewState().showProgressBar();
-
         Subscription subscribe = observable
                 .subscribe(responses -> {
                     getViewState().setData(responses);
@@ -82,9 +76,22 @@ public class MainPresenter extends MvpPresenter<MainView> {
         compositeSubscription.add(subscribe);
     }
 
+    void refreshData() {
+        if (interactor.getCountCity() == 0) {
+            hideProgressBar();
+            return;
+        }
+        getWeather(interactor.refreshData());
+    }
+
+    void removeCity(int position) {
+        interactor.removeCity(position);
+        getViewState().setData(interactor.getCities());
+    }
 
     void hideProgressBar() {
         getViewState().hideProgressBar();
+        getViewState().hideSwipeRefresh();
     }
 
     void showAlert() {

@@ -1,10 +1,13 @@
-package com.example.marina.openweather.data.logic.interactor;
+package com.example.marina.openweather.data.interactor;
+
+import android.content.Context;
+import android.location.Location;
 
 import com.example.marina.openweather.Api;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.data.RetryWhen;
-import com.example.marina.openweather.data.logic.repository.WeatherRepository;
+import com.example.marina.openweather.data.repository.WeatherRepository;
 import com.example.marina.openweather.data.model.Response;
 import com.example.marina.openweather.exception.ErrorResponseException;
 
@@ -12,6 +15,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.nlopez.smartlocation.SmartLocation;
+import io.nlopez.smartlocation.rx.ObservableFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -22,6 +27,10 @@ public class WeatherInteractor {
     Api api;
     @Inject
     WeatherRepository repository;
+    @Inject
+    Context context;
+    @Inject
+    SmartLocation.LocationControl locationControl;
 
     public WeatherInteractor() {
         MyApplication.get().getComponent().inject(this);
@@ -55,5 +64,38 @@ public class WeatherInteractor {
                 })
                 .retryWhen(RetryWhen.getDefaultInstance())
                 .map(ignored -> repository.getCities());
+    }
+
+    public Observable<Location> getLocation() {
+        if (locationControl.state().isAnyProviderAvailable()) {
+            return ObservableFactory
+                    .from(locationControl);
+        } else {
+            return null;
+        }
+    }
+
+    public Observable<List<Response>> refreshData() {
+        for (Response response : repository.getCities()) {
+            removeCity(response);
+            return getWeatherObservable(response.getCity().getName());
+        }
+        return null;
+    }
+
+    public int getCountCity() {
+        return repository.getCities().size();
+    }
+
+    public List<Response> getCities() {
+        return repository.getCities();
+    }
+
+    public void removeCity(Response response) {
+        repository.removeCity(response);
+    }
+
+    public void removeCity(int position) {
+        repository.removeCity(position);
     }
 }

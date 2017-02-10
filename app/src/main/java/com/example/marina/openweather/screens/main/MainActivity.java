@@ -8,30 +8,33 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.marina.openweather.Constants;
-import com.example.marina.openweather.screens.adapter.CityAdapter;
+import com.example.marina.openweather.screens.main.adapter.CityAdapter;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.Response;
+import com.example.marina.openweather.screens.main.listener.DeleteItemTouchHelper;
+import com.example.marina.openweather.screens.main.listener.TouchCallback;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
-public class MainActivity extends MvpAppCompatActivity implements MainView {
+public class MainActivity extends MvpAppCompatActivity implements MainView, TouchCallback {
 
     @InjectPresenter
     MainPresenter mainPresenter;
@@ -43,8 +46,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     FloatingActionButton fab;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
 
-    private CityAdapter adapter;
+    private CityAdapter adapter = new CityAdapter(new ArrayList<>());
     private AlertDialog alertDialog;
 
     @Override
@@ -54,7 +59,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         fab.setOnClickListener(view -> mainPresenter.showAlert());
+
+        ItemTouchHelper.Callback callback = new DeleteItemTouchHelper(this);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        swipeRefresh.setOnRefreshListener(() -> mainPresenter.refreshData());
     }
 
     @Override
@@ -65,12 +77,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void setData(List<Response> cities) {
-        if (adapter == null) {
-            adapter = new CityAdapter(cities);
-            recyclerView.setAdapter(adapter);
-        } else {
-            adapter.setData(cities);
-        }
+        adapter.setData(cities);
     }
 
     @Override
@@ -86,6 +93,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void showAlert() {
         final EditText input = new EditText(this);
+        input.setSingleLine();
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.enter_city)
                 .setView(input)
@@ -103,26 +111,26 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         }
     }
 
+
     @Override
     public void requestPermissions() {
-        ActivityCompat.requestPermissions(MainActivity.this,
-                new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION},
-                Constants.ACCESS_LOCATION);
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION})
+                .subscribe(granted -> {
+                    if (granted) {
+                        mainPresenter.getLocation();
+                    } else {
+                        Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.parse("package:" + getPackageName()));
+                        startActivityForResult(appSettingsIntent, Constants.ACCESS_LOCATION);
+                    }
+                });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        if (grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            mainPresenter.getLocation();
-        } else {
-            Intent appSettingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + getPackageName()));
-            startActivityForResult(appSettingsIntent, Constants.ACCESS_LOCATION);
-        }
+    public void hideSwipeRefresh() {
+        swipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -131,5 +139,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             requestPermissions();
         }
     }
-}
 
+    @Override
+    public void onDismiss(int position) {
+        mainPresenter.removeCity(position);
+    }
+}

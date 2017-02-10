@@ -1,8 +1,7 @@
-package com.example.marina.openweather.screens.adapter;
+package com.example.marina.openweather.screens.main.adapter;
 
 import butterknife.BindView;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,23 +9,27 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.marina.openweather.MyApplication;
 import com.example.marina.openweather.R;
-import com.example.marina.openweather.data.image.GlideLoader;
 import com.example.marina.openweather.data.image.ImageLoader;
 import com.example.marina.openweather.data.model.Response;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     private List<Response> cities;
     private final static int CURRENT_TEMP = 0;
-    private Context context;
-    private ImageLoader glideLoader;
+
+    @Inject
+    ImageLoader glideLoader;
 
     public CityAdapter(List<Response> cities) {
         this.cities = cities;
+        MyApplication.get().getComponent().inject(this);
 
     }
 
@@ -35,9 +38,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                                                      int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_city, parent, false);
-        context = parent.getContext();
-        glideLoader = new GlideLoader(context);
-
         ViewHolder holder = new ViewHolder(v);
         return holder;
     }
@@ -53,8 +53,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
 
     public void setData(List<Response> cities) {
         this.cities = cities;
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemCount() {
