@@ -99,8 +99,11 @@ public class AppModule {
     @Singleton
     Realm provideRealm() {
         Realm.init(mApplicationContext);
-        final RealmConfiguration config = new RealmConfiguration.Builder().build();
+        final RealmConfiguration config = new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
         Realm.setDefaultConfiguration(config);
+
         return Realm.getInstance(config);
     }
 }
