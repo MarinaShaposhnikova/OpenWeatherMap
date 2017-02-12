@@ -1,36 +1,32 @@
 package com.example.marina.openweather.screens.main.adapter;
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.example.marina.openweather.R;
-import org.junit.Test;
+import com.example.marina.openweather.screens.main.MainActivity;
 
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.action.ViewActions.click;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-
+@RunWith(AndroidJUnit4.class)
 public class CityAdapterTest {
-    @Test
-    public void clickOnItemWithTextEqualToTwo() {
-        onData(is(instanceOf(CityAdapter.class)))
-                .inAdapterView(withId(R.id.recycleView))
-                .perform(click()); // Standard ViewAction
-    }
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
 
     @Test
-    public void onBindViewHolder() throws Exception {
-
-        onData(is(instanceOf(CityAdapter.ViewHolder.class)))
-                .inAdapterView(withId(R.id.imgPin))
-                .atPosition(0)
-                //.onChildView(withId(R.id.imgPin))
+    public void itemContainsGpsImage() {
+        onView(withId(R.id.recycleView))
+                .perform(RecyclerViewActions.scrollToPosition(0));
+        onView(withId(R.id.imgPin))
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-
-        //onData(withId(R.id.imgPin)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
-
 }
