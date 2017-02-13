@@ -12,6 +12,7 @@ import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.image.ImageLoader;
 import com.example.marina.openweather.data.model.CityObject;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,6 +56,19 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     public void setData(List<CityObject> cities) {
         this.cities = cities;
         notifyDataSetChanged();
+    }
+
+    public void onMove(int fromPosition, int toPosition){
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(cities, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(cities, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     public CityObject getCurrentCity(int position) {

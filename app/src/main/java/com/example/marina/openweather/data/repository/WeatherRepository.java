@@ -72,10 +72,23 @@ public class WeatherRepository {
         deleteCity(city);
     }
 
-    private void addCity(CityObject city) {
+    public void moveCity(int fromPosition, int toPosition) {
+        List<CityObject> cities = getAllCitiesObject();
+
+        int oldFromPosition = cities.get(fromPosition).getPosition();
+        int oldToPosition = cities.get(toPosition).getPosition();
         realm.executeTransaction(realmObject -> {
-            realmObject.copyToRealmOrUpdate(city);
+            cities.get(fromPosition).setPosition(oldToPosition);
+            realmObject.copyToRealmOrUpdate(cities.get(fromPosition));
         });
+        realm.executeTransaction(realmObject -> {
+            cities.get(toPosition).setPosition(oldFromPosition);
+            realmObject.copyToRealmOrUpdate(cities.get(toPosition));
+        });
+    }
+
+    private void addCity(CityObject city) {
+        realm.executeTransaction(realmObject -> realmObject.copyToRealmOrUpdate(city));
     }
 
     public void addMyCity(CityObject city) {

@@ -32,6 +32,7 @@ import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView, TouchCallback {
@@ -143,5 +144,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     @Override
     public void onDismiss(int position) {
         mainPresenter.removeCity(adapter.getCurrentCity(position));
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        mainPresenter.moveCity(fromPosition, toPosition);
+        adapter.onMove(fromPosition, toPosition);
     }
 }

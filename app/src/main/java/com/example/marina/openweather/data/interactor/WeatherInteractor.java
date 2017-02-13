@@ -97,6 +97,10 @@ public class WeatherInteractor {
         repository.removeCity(city);
     }
 
+    public void moveCity(int fromPosition, int toPosition) {
+        repository.moveCity(fromPosition, toPosition);
+    }
+
     private CityObject createCityRealm(Response response) {
         return new CityObject(response.getCity().getName(),
                 response.getWeather().get(0).getMainParameters().getTemp(),
