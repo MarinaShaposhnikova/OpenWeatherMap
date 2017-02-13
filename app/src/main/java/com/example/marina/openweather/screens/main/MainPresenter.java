@@ -70,6 +70,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         return;
                     }
                     getViewState().showMessage(R.string.no_internet);
+                    getViewState().setData(interactor.getCities());
                 });
 
         compositeSubscription.add(subscribe);
