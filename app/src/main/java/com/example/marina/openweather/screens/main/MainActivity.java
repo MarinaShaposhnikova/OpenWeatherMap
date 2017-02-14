@@ -25,7 +25,7 @@ import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.screens.main.adapter.CityAdapter;
-import com.example.marina.openweather.screens.main.listener.DeleteItemTouchHelper;
+import com.example.marina.openweather.screens.main.listener.DeleteMoveItemTouchHelper;
 import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
@@ -64,7 +64,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         fab.setOnClickListener(view -> mainPresenter.showAlert());
         networkIndicator.setOnClickListener(view -> mainPresenter.refreshData());
 
-        ItemTouchHelper.Callback callback = new DeleteItemTouchHelper(this);
+        ItemTouchHelper.Callback callback = new DeleteMoveItemTouchHelper(this);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
 
