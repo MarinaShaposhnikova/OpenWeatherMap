@@ -94,4 +94,5 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'io.nlopez.smartlocation:library:3.2.11'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.github.pwittchen:reactivenetwork:0.8.0'
 }

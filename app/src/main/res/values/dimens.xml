@@ -10,4 +10,5 @@
     <dimen name="pin_image_size">30dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_radius">4dp</dimen>
+    <dimen name="network_indicator_height">50dp</dimen>
 </resources>

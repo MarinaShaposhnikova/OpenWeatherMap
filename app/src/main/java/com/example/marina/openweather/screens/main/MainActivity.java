@@ -1,13 +1,8 @@
 package com.example.marina.openweather.screens.main;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,18 +17,23 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.marina.openweather.Constants;
+import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.model.CityObject;
 import com.example.marina.openweather.screens.main.adapter.CityAdapter;
-import com.example.marina.openweather.R;
 import com.example.marina.openweather.screens.main.listener.DeleteItemTouchHelper;
 import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView, TouchCallback {
 
@@ -49,6 +49,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     ProgressBar progressBar;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.networkIndicator)
+    TextView networkIndicator;
 
     private CityAdapter adapter = new CityAdapter(new ArrayList<>());
     private AlertDialog alertDialog;
@@ -60,6 +62,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         fab.setOnClickListener(view -> mainPresenter.showAlert());
+        networkIndicator.setOnClickListener(view -> mainPresenter.refreshData());
 
         ItemTouchHelper.Callback callback = new DeleteItemTouchHelper(this);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -74,6 +77,26 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     public void showMessage(int idMessage) {
         Snackbar.make(fab, getString(idMessage), Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void showNetworkIndicator(int idMessage) {
+        networkIndicator.setVisibility(View.VISIBLE);
+        networkIndicator.setText(getString(idMessage));
+        networkIndicator.setBackgroundColor(Color.YELLOW);
+        networkIndicator.setClickable(false);
+    }
+
+    @Override
+    public void connectNetworkIndicator(int idMessage) {
+        networkIndicator.setText(getString(idMessage));
+        networkIndicator.setBackgroundColor(Color.GREEN);
+        networkIndicator.setClickable(true);
+    }
+
+    @Override
+    public void hideNetworkIndicator() {
+        networkIndicator.setVisibility(View.GONE);
     }
 
     @Override

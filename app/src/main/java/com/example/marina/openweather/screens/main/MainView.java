@@ -13,6 +13,12 @@ interface MainView extends MvpView {
     @StateStrategyType(SkipStrategy.class)
     void showMessage(int idMessage);
 
+    void showNetworkIndicator(int idMessage);
+
+    void hideNetworkIndicator();
+
+    void connectNetworkIndicator(int idMessage);
+
     void setData(List<CityObject> cities);
 
     void showProgressBar();

@@ -35,7 +35,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        if (viewHolder.getAdapterPosition() == 0) {
+        if (viewHolder.getAdapterPosition() == 0 || target.getAdapterPosition() ==  0) {
             return false;
         }
         touchCallback.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
