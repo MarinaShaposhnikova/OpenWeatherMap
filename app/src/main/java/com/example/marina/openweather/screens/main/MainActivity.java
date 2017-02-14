@@ -90,6 +90,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         networkIndicator.setText(getString(idMessage));
         networkIndicator.setBackgroundColor(Color.YELLOW);
         networkIndicator.setClickable(false);
+        swipeRefresh.setEnabled(false);
     }
 
     @Override
@@ -97,6 +98,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         networkIndicator.setText(getString(idMessage));
         networkIndicator.setBackgroundColor(Color.GREEN);
         networkIndicator.setClickable(true);
+        swipeRefresh.setEnabled(true);
     }
 
     @Override
@@ -127,9 +129,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
         alertDialog = new AlertDialog.Builder(this)
                 .setTitle(R.string.enter_city)
                 .setView(input)
-                .setPositiveButton(R.string.ok, (dialog, whichButton) -> {
-                    mainPresenter.getCityWeather(input.getText().toString());
-                })
+                .setPositiveButton(R.string.ok, (dialog, whichButton) -> mainPresenter.getCityWeather(input.getText().toString()))
                 .setOnDismissListener(dialog -> mainPresenter.dismissAlert())
                 .show();
     }
@@ -140,7 +140,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
             alertDialog.dismiss();
         }
     }
-
 
     @Override
     public void requestPermissions() {

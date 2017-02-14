@@ -35,13 +35,14 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void getLocation() {
-        interactor.getLocation()
+        Subscription subscription = interactor.getLocation()
                 .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude())
                         , error -> {
                             getViewState().showMessage(R.string.location_disabled);
                             getViewState().setData(interactor.getCities());
                             hideProgressBar();
                         });
+        compositeSubscription.add(subscription);
     }
 
     void getCityWeather(String cityName) {
@@ -112,7 +113,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     private void checkConnection() {
-        NetworkUtils.isConnected()
+        Subscription subscription = NetworkUtils.isConnected()
                 .subscribe(isConnectedToInternet -> {
                     if (isConnectedToInternet) {
                         getViewState().connectNetworkIndicator(R.string.connected);
@@ -120,6 +121,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         getViewState().showNetworkIndicator(R.string.no_internet);
                     }
                 });
+        compositeSubscription.add(subscription);
     }
 
     @Override
