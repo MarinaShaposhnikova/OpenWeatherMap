@@ -3,6 +3,15 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
+final PLAY_SERVICES_VERSION = '10.0.1'
+final SUPPORT_LIBRARY_VERSION = '24.2.1'
+final RETROFIT_VERSION = '2.1.0'
+final DAGGER_VERSION = '2.7'
+final BUTTERKNIFE_VERSION = '8.4.0'
+final MVP_MOXY_VERSION = '1.1.2'
+final STETHO_VERSION = '1.4.1'
+def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -37,15 +46,6 @@ dependencies {
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-
-    final PLAY_SERVICES_VERSION = '10.0.1'
-    final SUPPORT_LIBRARY_VERSION = '24.2.1'
-    final RETROFIT_VERSION = '2.1.0'
-    final DAGGER_VERSION = '2.7'
-    final BUTTERKNIFE_VERSION = '8.4.0'
-    final MVP_MOXY_VERSION = '1.1.2'
-
-    def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -80,9 +80,9 @@ dependencies {
     compile "com.arello-mobile:moxy-app-compat:$MVP_MOXY_VERSION"
     apt "com.arello-mobile:moxy-compiler:$MVP_MOXY_VERSION"
 
-    compile 'com.facebook.stetho:stetho:1.4.1'
-    compile 'com.facebook.stetho:stetho-urlconnection:1.4.1'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
+    compile "com.facebook.stetho:stetho:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho-urlconnection:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
 
     //rx
     compile 'io.reactivex:rxjava:1.2.2'
