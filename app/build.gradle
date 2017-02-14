@@ -95,4 +95,5 @@ dependencies {
     compile 'io.nlopez.smartlocation:library:3.2.11'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.github.pwittchen:reactivenetwork:0.8.0'
+    compile "com.andkulikov:transitionseverywhere:1.7.0"
 }

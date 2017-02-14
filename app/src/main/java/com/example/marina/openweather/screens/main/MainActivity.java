@@ -17,6 +17,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -28,6 +29,7 @@ import com.example.marina.openweather.screens.main.adapter.CityAdapter;
 import com.example.marina.openweather.screens.main.listener.DeleteMoveItemTouchHelper;
 import com.example.marina.openweather.screens.main.listener.TouchCallback;
 import com.tbruyelle.rxpermissions.RxPermissions;
+import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
     SwipeRefreshLayout swipeRefresh;
     @BindView(R.id.networkIndicator)
     TextView networkIndicator;
+    @BindView(R.id.content_main)
+    RelativeLayout content_main;
 
     private CityAdapter adapter = new CityAdapter(new ArrayList<>());
     private AlertDialog alertDialog;
@@ -81,6 +85,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
 
     @Override
     public void showNetworkIndicator(int idMessage) {
+        TransitionManager.beginDelayedTransition(content_main);
         networkIndicator.setVisibility(View.VISIBLE);
         networkIndicator.setText(getString(idMessage));
         networkIndicator.setBackgroundColor(Color.YELLOW);
@@ -96,6 +101,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView, Touc
 
     @Override
     public void hideNetworkIndicator() {
+        TransitionManager.beginDelayedTransition(content_main);
         networkIndicator.setVisibility(View.GONE);
     }
 
