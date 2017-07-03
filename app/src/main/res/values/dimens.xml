@@ -8,4 +8,6 @@
     <dimen name="font_size">16sp</dimen>
     <dimen name="weather_image_size">50dp</dimen>
     <dimen name="pin_image_size">30dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="card_radius">4dp</dimen>
 </resources>

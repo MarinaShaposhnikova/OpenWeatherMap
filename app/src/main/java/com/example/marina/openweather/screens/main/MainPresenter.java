@@ -92,6 +92,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().setData(interactor.getCities());
     }
 
+    void moveCity(int fromPosition, int toPosition) {
+        interactor.moveCity(fromPosition, toPosition);
+    }
+
     private void hideProgressBar() {
         getViewState().hideProgressBar();
         getViewState().hideSwipeRefresh();

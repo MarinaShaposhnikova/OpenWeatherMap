@@ -28,14 +28,18 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = 0;
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         int swipeFlags = ItemTouchHelper.END;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        return false;
+        if (viewHolder.getAdapterPosition() == 0) {
+            return false;
+        }
+        touchCallback.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        return true;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return false;
+        return true;
     }
 
     @Override

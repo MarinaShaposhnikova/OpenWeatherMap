@@ -4,6 +4,7 @@ import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -204,7 +205,8 @@ public class MainActivityTest {
                     @Override
                     public void perform(UiController uiController, View view) {
                         LinearLayout linLayout = (LinearLayout) view;
-                        RelativeLayout relLayout = (RelativeLayout) linLayout.getChildAt(0);
+                        CardView cardView = (CardView) linLayout.getChildAt(0);
+                        RelativeLayout relLayout = (RelativeLayout) cardView.getChildAt(0);
                         TextView tv = (TextView) relLayout.getChildAt(positionTextView);
                         stringHolder[0] = tv.getText().toString();
                     }
@@ -228,7 +230,8 @@ public class MainActivityTest {
                     @Override
                     public void perform(UiController uiController, View view) {
                         LinearLayout linLayout = (LinearLayout) view;
-                        RelativeLayout relLayout = (RelativeLayout) linLayout.getChildAt(0);
+                        CardView cardView = (CardView) linLayout.getChildAt(0);
+                        RelativeLayout relLayout = (RelativeLayout) cardView.getChildAt(0);
                         ImageView img = (ImageView) relLayout.getChildAt(0);
                         visibility = img.getVisibility();
                     }
