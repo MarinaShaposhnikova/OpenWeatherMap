@@ -6,6 +6,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.example.marina.openweather.Constants;
 import com.example.marina.openweather.MyApplication;
+import com.example.marina.openweather.util.NetworkUtils;
 import com.example.marina.openweather.R;
 import com.example.marina.openweather.data.interactor.WeatherInteractor;
 import com.example.marina.openweather.data.model.CityObject;
@@ -30,16 +31,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
         super.onFirstViewAttach();
         MyApplication.get().getComponent().inject(this);
         getViewState().requestPermissions();
+        checkConnection();
     }
 
     void getLocation() {
-        interactor.getLocation()
+        Subscription subscription = interactor.getLocation()
                 .subscribe(location -> getMyWeather(location.getLatitude(), location.getLongitude())
                         , error -> {
                             getViewState().showMessage(R.string.location_disabled);
                             getViewState().setData(interactor.getCities());
                             hideProgressBar();
                         });
+        compositeSubscription.add(subscription);
     }
 
     void getCityWeather(String cityName) {
@@ -69,7 +72,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         getViewState().showMessage(R.string.not_success);
                         return;
                     }
-                    getViewState().showMessage(R.string.no_internet);
                     getViewState().setData(interactor.getCities());
                 });
 
@@ -82,6 +84,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
             return;
         }
         getLocation();
+        getViewState().hideNetworkIndicator();
         if (interactor.getCountCity() > 1) {
             getWeather(interactor.refreshData());
         }
@@ -107,6 +110,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     void dismissAlert() {
         getViewState().dismissAlert();
+    }
+
+    private void checkConnection() {
+        Subscription subscription = NetworkUtils.isConnected()
+                .subscribe(isConnectedToInternet -> {
+                    if (isConnectedToInternet) {
+                        getViewState().connectNetworkIndicator(R.string.connected);
+                    } else {
+                        getViewState().showNetworkIndicator(R.string.no_internet);
+                    }
+                });
+        compositeSubscription.add(subscription);
     }
 
     @Override

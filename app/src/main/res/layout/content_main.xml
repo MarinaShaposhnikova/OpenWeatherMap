@@ -9,16 +9,24 @@
     tools:context="com.example.marina.openweather.screens.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/networkIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/network_indicator_height"
+        android:alpha="0.5"
+        android:gravity="center"
+        android:visibility="gone" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/networkIndicator">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

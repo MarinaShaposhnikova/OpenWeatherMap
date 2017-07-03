@@ -15,14 +15,14 @@ import android.view.View;
 
 import com.example.marina.openweather.R;
 
-public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
+public class DeleteMoveItemTouchHelper extends ItemTouchHelper.Callback {
     private TouchCallback touchCallback;
     private Bitmap icon;
     private Drawable background;
     private Paint paint;
     private boolean isInitiated;
 
-    public DeleteItemTouchHelper(TouchCallback touchCallback) {
+    public DeleteMoveItemTouchHelper(TouchCallback touchCallback) {
         this.touchCallback = touchCallback;
     }
 
@@ -35,7 +35,7 @@ public class DeleteItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        if (viewHolder.getAdapterPosition() == 0) {
+        if (viewHolder.getAdapterPosition() == 0 || target.getAdapterPosition() == 0) {
             return false;
         }
         touchCallback.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
