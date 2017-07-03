@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
+
+final PLAY_SERVICES_VERSION = '10.0.1'
+final SUPPORT_LIBRARY_VERSION = '24.2.1'
+final RETROFIT_VERSION = '2.1.0'
+final DAGGER_VERSION = '2.7'
+final BUTTERKNIFE_VERSION = '8.4.0'
+final MVP_MOXY_VERSION = '1.1.2'
+final STETHO_VERSION = '1.4.1'
+def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.example.marina.openweather"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2') {
+        // Necessary to avoid version conflicts
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+    }
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+    testCompile 'junit:junit:4.12'
+
+    // App Dependencies
+    compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
+    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
+
+    compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
+
+    compile "com.squareup.okhttp3:logging-interceptor:3.1.2"
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+
+    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    apt "com.jakewharton:butterknife-compiler:$BUTTERKNIFE_VERSION"
+
+    compile "com.google.dagger:dagger:$DAGGER_VERSION"
+    apt daggerCompiler
+
+    // Mvp
+    compile "com.arello-mobile:moxy:$MVP_MOXY_VERSION"
+    compile "com.arello-mobile:moxy-android:$MVP_MOXY_VERSION"
+    compile "com.arello-mobile:moxy-app-compat:$MVP_MOXY_VERSION"
+    apt "com.arello-mobile:moxy-compiler:$MVP_MOXY_VERSION"
+
+    compile "com.facebook.stetho:stetho:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho-urlconnection:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
+
+    //rx
+    compile 'io.reactivex:rxjava:1.2.2'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
+
+    //utils
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'io.nlopez.smartlocation:library:3.2.11'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.github.pwittchen:reactivenetwork:0.8.0'
+    compile "com.andkulikov:transitionseverywhere:1.7.0"
+}
